@@ -18,6 +18,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -35,12 +38,14 @@ import androidx.navigation.compose.rememberNavController
 
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                Task5()
+                val sizeClass = calculateWindowSizeClass(this)
+                Task6(sizeClass.widthSizeClass)
             }
         }
         Log.d("task3", "onCreate triggered")
@@ -131,4 +136,41 @@ fun Task5(navController: NavHostController = rememberNavController()){
             }
         }
     }
+}
+
+@Composable
+fun Task6(sizeClass: WindowWidthSizeClass){
+    Scaffold { paddingValues ->
+        when (sizeClass) {
+            WindowWidthSizeClass.Compact -> {
+                Column(Modifier.fillMaxWidth().padding(paddingValues)) {
+                    for (i in 1..5) {
+                        Card(Modifier.fillMaxWidth()) {
+                            Text("Item $i")
+                        }
+                    }
+                }
+            }
+
+            else -> {
+                Row(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
+                    Column(modifier = Modifier.weight(0.5f)) {
+                        for (i in 1..5) {
+                            Card(Modifier.fillMaxWidth()) {
+                                Text("Item $i")
+                            }
+                        }
+                    }
+                    Column(modifier = Modifier.weight(1f)) {
+                        for (i in 1..5) {
+                            Card(Modifier.fillMaxWidth()) {
+                                Text("This item has number $i")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
