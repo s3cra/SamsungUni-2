@@ -7,15 +7,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -27,6 +28,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.module3.ui.theme.AppTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +40,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                Task4()
+                Task5()
             }
         }
         Log.d("task3", "onCreate triggered")
@@ -107,6 +112,23 @@ fun Task4(viewModel: CounterViewModel = viewModel()){
             viewModel.increase()
         }) {
             Text("+")
+        }
+    }
+}
+
+@Composable
+@Preview(showSystemUi = true)
+fun Task5(navController: NavHostController = rememberNavController()){
+    Scaffold { paddingValues ->
+        NavHost(navController, startDestination = "home", modifier = Modifier.padding(paddingValues)){
+            composable("home") {
+                Button({
+                    navController.navigate("details")
+                }) { Text("Details") }
+            }
+            composable("details") {
+                Text("Details")
+            }
         }
     }
 }
